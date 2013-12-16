@@ -24,6 +24,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.KeyEvent;
@@ -31,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,22 +54,33 @@ public class ColorPickerDialog
 	private ColorStateList mHexDefaultTextColor;
 
 	private OnColorChangedListener mListener;
+	
+	private Context context;
+	
+	private Button salva;
+	
+	private String prefColorName = "prefColorName";
 
 	public interface OnColorChangedListener {
 		public void onColorChanged(int color);
 	}
 	
-	public ColorPickerDialog(Context context, int initialColor) {
+	public ColorPickerDialog(Context context, int initialColor,String prefColorName,String dialogTitle) {
 		super(context);
 
-		init(initialColor);
+		this.context = context;
+		this.prefColorName = prefColorName;
+		init(initialColor,dialogTitle);
+		
 	}
 
-	private void init(int color) {
+	private void init(int color,String dialogTitle) {
 		// To fight color banding.
 		getWindow().setFormat(PixelFormat.RGBA_8888);
 
 		setUp(color);
+		
+		if(dialogTitle != null)setTitle(dialogTitle);
 
 	}
 
@@ -84,6 +97,7 @@ public class ColorPickerDialog
 		mColorPicker = (ColorPickerView) layout.findViewById(R.id.color_picker_view);
 		mOldColor = (ColorPickerPanelView) layout.findViewById(R.id.old_color_panel);
 		mNewColor = (ColorPickerPanelView) layout.findViewById(R.id.new_color_panel);
+		salva = (Button) layout.findViewById(R.id.salva);
 		
 		mHexVal = (EditText) layout.findViewById(R.id.hex_val);
 		mHexVal.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -126,6 +140,7 @@ public class ColorPickerDialog
 		mColorPicker.setOnColorChangedListener(this);
 		mOldColor.setColor(color);
 		mColorPicker.setColor(color, true);
+		salva.setOnClickListener(this);
 
 	}
 
@@ -208,9 +223,18 @@ public class ColorPickerDialog
 				mListener.onColorChanged(mNewColor.getColor());
 			}
 		}
+		salvaCorNasPreferencias(null);
 		dismiss();
 	}
 	
+	public void salvaCorNasPreferencias(View v) {
+		if(prefColorName != null && prefColorName.length() > 0){
+			PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(prefColorName, getColor()).commit();
+			PreferenceManager.getDefaultSharedPreferences(context).edit().putString(prefColorName+"_hex", mHexVal.getText().toString()).commit();
+			
+		}
+	}
+
 	@Override
 	public Bundle onSaveInstanceState() {
 		Bundle state = super.onSaveInstanceState();

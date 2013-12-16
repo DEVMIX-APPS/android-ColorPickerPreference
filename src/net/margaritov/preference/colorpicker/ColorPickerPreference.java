@@ -47,10 +47,29 @@ public class ColorPickerPreference
 	private float mDensity = 0;
 	private boolean mAlphaSliderEnabled = false;
 	private boolean mHexValueEnabled = false;
+	private String prefName = null;
+	private String dialogTitle = null;
 
 	public ColorPickerPreference(Context context) {
 		super(context);
 		init(context, null);
+	}
+	
+	public ColorPickerPreference(Context context,String prefName) {
+		super(context);
+		init(context, null);
+		this.prefName = prefName;
+	}
+	
+	public ColorPickerPreference(Context context,String prefName,String dialogTitle,int defaultColor) {
+		super(context);
+		init(context, null);
+		this.prefName = prefName;
+		this.dialogTitle = dialogTitle;
+		if(defaultColor != 0){
+			this.mValue = defaultColor;
+		}
+		
 	}
 
 	public ColorPickerPreference(Context context, AttributeSet attrs) {
@@ -89,6 +108,7 @@ public class ColorPickerPreference
 		setPreviewColor();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void setPreviewColor() {
 		if (mView == null) return;
 		ImageView iView = new ImageView(getContext());
@@ -151,8 +171,8 @@ public class ColorPickerPreference
 		return false;
 	}
 	
-	protected void showDialog(Bundle state) {
-		mDialog = new ColorPickerDialog(getContext(), mValue);
+	public void showDialog(Bundle state) {
+		mDialog = new ColorPickerDialog(getContext(), mValue,prefName,dialogTitle);
 		mDialog.setOnColorChangedListener(this);
 		if (mAlphaSliderEnabled) {
 			mDialog.setAlphaSliderVisible(true);
@@ -170,16 +190,18 @@ public class ColorPickerPreference
 	 * Toggle Alpha Slider visibility (by default it's disabled)
 	 * @param enable
 	 */
-	public void setAlphaSliderEnabled(boolean enable) {
+	public ColorPickerPreference setAlphaSliderEnabled(boolean enable) {
 		mAlphaSliderEnabled = enable;
+		return this;
 	}
 
 	/**
 	 * Toggle Hex Value visibility (by default it's disabled)
 	 * @param enable
 	 */
-	public void setHexValueEnabled(boolean enable) {
+	public ColorPickerPreference setHexValueEnabled(boolean enable) {
 		mHexValueEnabled = enable;
+		return this;
 	}
 
 	/**

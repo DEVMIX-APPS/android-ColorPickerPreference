@@ -57,7 +57,7 @@ public class ColorPickerDialog
 	
 	private Context context;
 	
-	private Button salva;
+	//private Button salva;
 	
 	private String prefColorName = "prefColorName";
 
@@ -97,7 +97,7 @@ public class ColorPickerDialog
 		mColorPicker = (ColorPickerView) layout.findViewById(R.id.color_picker_view);
 		mOldColor = (ColorPickerPanelView) layout.findViewById(R.id.old_color_panel);
 		mNewColor = (ColorPickerPanelView) layout.findViewById(R.id.new_color_panel);
-		salva = (Button) layout.findViewById(R.id.salva);
+		//salva = (Button) layout.findViewById(R.id.btnSalva);
 		
 		mHexVal = (EditText) layout.findViewById(R.id.hex_val);
 		mHexVal.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -140,7 +140,7 @@ public class ColorPickerDialog
 		mColorPicker.setOnColorChangedListener(this);
 		mOldColor.setColor(color);
 		mColorPicker.setColor(color, true);
-		salva.setOnClickListener(this);
+		//salva.setOnClickListener(this);
 
 	}
 

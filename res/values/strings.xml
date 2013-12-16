@@ -6,7 +6,7 @@
     
     <!-- Color Picker -->
     <string name="dialog_color_picker">Color Picker</string>
-    <string name="press_color_to_apply">Press on Color to apply</string>    
+    <string name="press_color_to_apply">Pressione a cor para salvar</string>    
     
     <!-- Preferences -->
     <string name="pref_category">Category</string>
